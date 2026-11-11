@@ -67,14 +67,14 @@ Vercel reference: https://vercel.com/docs/domains/working-with-domains/add-a-dom
 - Shared header, footer, and UI: `src/components/`.
 - Form constraints: `src/lib/validation.ts`; server submission: `src/app/api/join/route.ts`.
 
-Preserve the supplied vision and strategic foundation. Describe proposed activity as intended work. Do not infer that conference participants are movement members. The About page links the historical sources. Facebook automated access was restricted and the supplied EPI News page could not be retrieved during implementation; neither was used to add unverified claims.
+Preserve the supplied vision and strategic foundation. Describe proposed activity as intended work. Do not infer that conference participants are movement members. The About page links the historical sources. Official Facebook photos were subsequently reviewed in the browser and their source references are recorded in `assets/conference/README.md`.
 
 ## Branding assets
 
 The supplied official EOP logo is preserved in `public/brand/eop-conference-logo.jpg`, with an optimized WebP copy for navigation and footer. Three authentic conference photographs were selected from the official Facebook page at the client’s request. The website serves local WebP copies from `public/images/`, with source originals and dated Facebook references preserved in `assets/conference/`. Captions distinguish the 2025 conference from the proposed student movement. Earlier illustrative explorations are retained in `assets/artwork/` and are not displayed.
 
-To replace an image, preserve its source original and provenance, then update the relevant `next/image` source, dimensions, alt text, and caption. Do not recolor or distort the logo. The favicon is a proportionally resized copy of the supplied official identity.
+To replace an image, preserve its source original and provenance, then update the relevant `next/image` source, dimensions, alt text, and caption. Do not recolor or distort the logo. The browser favicon uses the EOP lettering from the supplied identity, with 16, 32, 48, and 64 pixel sizes. Matching PNG and Apple touch icons are included. The full source logo remains unchanged.
 
 ## Content and launch confirmations
 
-Confirm the movement's operating contact, privacy and retention arrangements, before launch. The site makes no claims about founders, membership numbers, chapters, partners, or completed programs. Exactly four primary pages are included; sitemap, robots, Open Graph image, 404, and the form API are technical routes.
+Confirm the movement's operating contact, privacy and retention arrangements before launch. The site makes no claims about founders, membership numbers, chapters, partners, or completed programs. Exactly four primary pages are included; sitemap, robots, Open Graph image, 404, and the form API are technical routes.
