@@ -4,6 +4,10 @@ export const site = {
   name: "Echo of Palestine",
   url: "https://echoofpalestine.com",
   facebook: "https://www.facebook.com/eopinternationalconference/",
+  // Temporary destinations requested by the client. Confirm before launch.
+  instagram: "https://www.instagram.com/eop-conference/",
+  x: "https://x.com/eop-conference",
+  whatsapp: "https://wa.me/923000000000",
   initiative: "International Student Solidarity Movement for Palestine",
 };
 

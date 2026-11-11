@@ -8,8 +8,8 @@ export const metadata = pageMetadata("Echo of Palestine | International Student 
 export default function Home() {
   return <>
     <section className="institutional-hero">
-      <div className="hero-copy"><h1>From Solidarity<br />to <em>Sustained Action.</em></h1><p>Building a Global Infrastructure for Student Solidarity, Institutional Accountability, and Collective Action.</p><div className="actions"><ButtonLink href="/join-us">Join the Movement</ButtonLink><TextLink href="/vision-mission">Explore Our Vision</TextLink></div></div>
-      <figure className="hero-photograph"><Image src="/images/conference-audience.webp" alt="Audience and media at the Echo of Palestine International Conference in Islamabad." fill sizes="(max-width: 800px) 100vw, 54vw" preload /><figcaption>Echo of Palestine International Conference<span>Islamabad · February 2025</span></figcaption></figure>
+      <div className="container hero-content"><div className="hero-copy"><h1>From Solidarity<br />to <em>Sustained Action.</em></h1><p>Building a Global Infrastructure for Student Solidarity, Institutional Accountability, and Collective Action.</p><div className="actions"><ButtonLink href="/join-us">Join the Movement</ButtonLink><TextLink href="/vision-mission">Explore Our Vision</TextLink></div></div></div>
+      <figure className="hero-photograph"><Image src="/images/conference-audience.webp" alt="Audience and media at the Echo of Palestine International Conference in Islamabad." fill sizes="100vw" preload /><figcaption>Echo of Palestine International Conference<span>Islamabad · February 2025</span></figcaption></figure>
     </section>
     <div className="movement-identity"><div className="container"><p>{site.initiative}</p><a href="/vision-mission">Discover the initiative <span aria-hidden="true">↗</span></a></div></div>
 

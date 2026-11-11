@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { site } from "@/lib/site";
 import "./globals.css";
+import "./site.css";
 
 const display = DM_Serif_Display({ variable: "--font-display", subsets: ["latin"], weight: "400", style: ["normal", "italic"], display: "swap" });
 const body = Manrope({ variable: "--font-body", subsets: ["latin"], display: "swap" });

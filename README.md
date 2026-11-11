@@ -63,7 +63,7 @@ Vercel reference: https://vercel.com/docs/domains/working-with-domains/add-a-dom
 - Home and the three inner pages: `src/app/page.tsx`, `src/app/about/page.tsx`, `src/app/vision-mission/page.tsx`, `src/app/join-us/page.tsx`.
 - Complete supplied vision, foundation, and priorities: `src/content/site-content.ts`.
 - Domain, official social reference, navigation, and metadata helper: `src/lib/site.ts`.
-- Shared design tokens and responsive rules: `src/app/globals.css`.
+- Shared design tokens and responsive rules: `src/app/site.css`; Tailwind setup: `src/app/globals.css`.
 - Shared header, footer, and UI: `src/components/`.
 - Form constraints: `src/lib/validation.ts`; server submission: `src/app/api/join/route.ts`.
 
@@ -78,3 +78,7 @@ To replace an image, preserve its source original and provenance, then update th
 ## Content and launch confirmations
 
 Confirm the movement's operating contact, privacy and retention arrangements before launch. The site makes no claims about founders, membership numbers, chapters, partners, or completed programs. Exactly four primary pages are included; sitemap, robots, Open Graph image, 404, and the form API are technical routes.
+
+## Temporary social destinations
+
+The footer uses the real official Facebook URL. At the client’s request, Instagram and X temporarily link to `eop-conference`, and WhatsApp uses the dummy Pakistan-format number `+92 300 0000000`. These are placeholders, not verified accounts or a working contact number. Instagram and X handles cannot normally contain hyphens; replace these with confirmed, platform-valid handles before launch. Update all destinations in `src/lib/site.ts`. No messages are sent by the site itself.
