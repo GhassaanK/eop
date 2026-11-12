@@ -38,16 +38,16 @@ export default function JoinForm({ available }: { available: boolean }) {
     submitting.current = true;
     setPending(true);
     try {
-      const res = await fetch("/api/join", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(checked.data), signal: AbortSignal.timeout(20_000) });
+      const res = await fetch("/api/join", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(checked.data), signal: AbortSignal.timeout(30_000) });
       const payload = await res.json() as { success?: boolean; message?: string; error?: string; errors?: JoinErrors };
       if (!res.ok || payload.success !== true) {
         setErrors(payload.errors ?? {});
-        showStatus(payload.error ?? "Your submission could not be confirmed. Please try again later.", true);
+        showStatus(payload.error ?? "We couldn't submit your information right now. Please try again later.", true);
       } else {
         form.reset();
-        showStatus(payload.message ?? "Your expression of interest has been submitted. This does not confirm membership.", false);
+        showStatus(payload.message ?? "Thank you for your interest. Your submission has been received.", false);
       }
-    } catch { showStatus("Your submission could not be confirmed. Please check your connection and try again later.", true); }
+    } catch { showStatus("We couldn't submit your information right now. Please try again later.", true); }
     finally { submitting.current = false; setPending(false); }
   }
 
@@ -68,7 +68,7 @@ export default function JoinForm({ available }: { available: boolean }) {
         <div className="field field-full"><label htmlFor="message">Message <span className="optional">(optional)</span></label><textarea id="message" name="message" rows={5} maxLength={limits.message} {...fieldProps("message")} />{errorFor("message")}</div>
       </div>
       <div className="honeypot" aria-hidden="true"><label htmlFor="website">Leave this field empty</label><input id="website" name="website" autoComplete="off" tabIndex={-1} maxLength={limits.website} /></div>
-      <label className="privacy-check"><input name="privacy" type="checkbox" required {...fieldProps("privacy")} /><span>I acknowledge that the information I provide will be sent to the initiative’s designated recipient through its email provider, Resend, to consider my expression of interest. Submission does not confirm membership. *</span></label>{errorFor("privacy")}
+      <label className="privacy-check"><input name="privacy" type="checkbox" required {...fieldProps("privacy")} /><span>I acknowledge that the information I provide will be sent to the initiative’s designated recipient through its email provider, to consider my expression of interest. Submission does not confirm membership. *</span></label>{errorFor("privacy")}
       <button className="button" type="submit" disabled={pending}>{pending ? "Submitting…" : "Submit expression of interest"}<Arrow /></button>
       <div ref={statusRef} tabIndex={-1} role="status" aria-live="polite" aria-atomic="true" className={status ? `form-status${status.error ? " error" : ""}` : undefined}>{status?.message}</div>
       <noscript><p className="form-notice">Please enable JavaScript to submit this form, or visit the official conference Facebook page.</p></noscript>

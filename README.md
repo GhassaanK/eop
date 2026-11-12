@@ -13,19 +13,37 @@ npm run dev
 
 Open the Local URL printed by Next.js (normally http://localhost:3000).
 
-## Email configuration
+## HostCry SMTP configuration
 
-Copy `.env.example` to `.env.local`, then set:
+The existing Join form sends through Nodemailer and HostCry, with no third-party sending API or database. Nodemailer and its TypeScript definitions are already included in the project.
 
-- `RESEND_API_KEY`: a Resend API key with email sending permission.
-- `JOIN_FORM_TO_EMAIL`: the initiative's designated recipient address.
-- `JOIN_FORM_FROM_EMAIL`: a sender address on a Resend-verified domain. A display name is supported.
+Keep the following values in untracked `.env.local` for local development and in Vercel's server-side environment variables for deployment:
 
-Restart the server after changing variables. Never commit `.env.local` or expose these variables with a `NEXT_PUBLIC_` prefix. The join page checks availability at request time. Without all three values, it explains that submissions are temporarily unavailable; the API returns 503. No success is shown unless Resend returns a successful response containing an email ID. Provider acceptance is not proof of inbox delivery.
+- `SMTP_HOST=eu1.hostbuddy.us`
+- `SMTP_PORT=465`
+- `SMTP_USER=partner@echoofpalestine.com`
+- `SMTP_PASSWORD`: the existing HostCry mailbox password. Never commit it or prefix it with `NEXT_PUBLIC_`.
+- `JOIN_FORM_TO_EMAIL=partner@echoofpalestine.com`
 
-The Route Handler uses Resend's HTTP API with a timeout, bounded request bodies, shared validation, a honeypot, an origin check, and provider idempotency for identical daily submissions. It sends plain-text mail and does not save submissions to a database, local files, localStorage, or application logs. Submitted data is handled by Resend and the recipient's email service. Before launch, the operator should confirm mailbox access, data retention practices, and responsibility for responding. Honeypot protection is basic; Vercel Firewall can provide deployment-level abuse controls if needed.
+The example file contains placeholders only. Preserve existing real values when updating `.env.local`. Restart local development after changing variables; redeploy Vercel after changing its configuration. Port 465 uses immediate TLS with certificate verification enabled.
 
-Integration reference: https://resend.com/docs/api-reference/emails/send-email
+The sender is `"Echo of Palestine" <SMTP_USER>`; the recipient is `JOIN_FORM_TO_EMAIL`. Reply-To is the submitter's validated address. Applicants do not receive an automated confirmation email. The organization receives an escaped HTML email and a plain-text alternative with the form fields, privacy acknowledgement, and UTC submission timestamp.
+
+The Node.js Route Handler awaits SMTP acceptance for the designated recipient before returning success. It bounds input to 16 KiB, retains strict server validation, rejects header injection, and checks the honeypot and request origin. SMTP connection, greeting, DNS, and socket timeouts are configured, with an overall 20-second send deadline and a 30-second route budget. Client requests time out after 30 seconds. SMTP credentials, internal provider errors, and applicant personal information are not logged. Nodemailer is protected by the server-only import boundary.
+
+If configuration is missing or invalid, the page shows temporary unavailability and the API returns HTTP 503. SMTP failures return HTTP 502 with a generic message; the form retains its entries. The form resets only after success. No data is saved in browser storage, a database, or runtime files.
+
+### Rate limiting and duplicate submissions
+
+The client disables the button while sending and uses an immediate submission guard to block concurrent clicks. There is no durable, distributed rate limiter or submission store in this service-free implementation. An in-memory Map would not enforce a production-wide limit across Vercel instances, so one is not used. Honeypot, origin checks, payload limits, and validation remain active. If deployment-level rate controls are available in the current Vercel plan, configure them for POST /api/join. Do not describe the honeypot as a distributed rate limiter.
+
+SMTP does not provide provider idempotency. A connection lost after server acceptance can make the outcome uncertain; a later manual retry may create a duplicate email. The site never reports success for an unconfirmed outcome. Inbox arrival and spam placement must be confirmed separately from SMTP acceptance.
+
+### SMTP connection troubleshooting
+
+If DNS and TCP port 465 are reachable but the TLS handshake times out before authentication, ask HostCry to verify that `eu1.hostbuddy.us:465` is serving implicit TLS and allows the source network and Vercel deployment. Confirm the recommended SMTP hostname and certificate configuration with the provider. Do not disable TLS verification or change ports to conceal the failure. After the connection issue is resolved, run `npm run test:smtp` once and confirm the labelled message in the mailbox separately.
+
+Transport reference: https://nodemailer.com/smtp
 
 ## Validate and build
 
@@ -37,13 +55,21 @@ npm run build
 npm start
 ```
 
-The automated API tests compile the real handler in memory and mock the external provider. They do not send real emails. Before launch, submit a test with valid credentials, confirm receipt in the intended inbox, and exercise the error state with an invalid key.
+The automated API tests compile the real handler in memory and mock Nodemailer. They cover SMTP acceptance, awaited sending, missing configuration, HTML escaping, header injection, malformed payloads, limits, recipient rejection, and safe failure handling. They do not send real emails.
+
+To send exactly one clearly labelled controlled email through the actual Join API code using local SMTP credentials:
+
+```sh
+npm run test:smtp
+```
+
+This sends to the configured organizational mailbox, never to an applicant. A passing result confirms SMTP acceptance only. Check the mailbox and spam folder separately for the subject `New Join Us Submission | SMTP integration test`. To test the UI locally, run `npm run dev`, open `/join-us`, check required-field errors, then make one intentional test submission and confirm its receipt. To test failure handling without changing the real password, rely on `npm test` or use a separate local test environment.
 
 ## Deploy to Vercel
 
 1. Push this project to your Git provider and import the repository in Vercel.
 2. Use the Next.js framework preset, repository root directory, `npm run build`, and the default output settings.
-3. Add the three email environment variables under Project Settings → Environment Variables for the intended environments. Verify the sender domain in Resend and add its required DNS records.
+3. Add all five SMTP environment variables under Project Settings → Environment Variables for the intended environments. Use port 465 and the HostCry mailbox password. Confirm HostCry permits SMTP connections from the deployment.
 4. Deploy. Redeploy after changing environment variables.
 5. Check all four routes, mobile navigation, and the expression of interest form on the deployment URL. Confirm an actual email reaches the recipient before announcing the form as operational.
 
@@ -53,7 +79,7 @@ The repository is ready for Vercel; deployment is not performed by the local bui
 
 1. In Vercel Project Settings → Domains, add `echoofpalestine.com` and `www.echoofpalestine.com`. Choose the apex as the primary domain and redirect www to it.
 2. In Namecheap Domain List → Manage → Advanced DNS, use the exact A/CNAME/TXT records Vercel currently displays for this project. Do not use copied or historical Vercel IP addresses.
-3. Remove only records that conflict with those hostnames. Preserve existing MX, mail-related TXT, and Resend verification records. If DNS is hosted elsewhere, make the changes at that DNS provider instead.
+3. Remove only records that conflict with those hostnames. Preserve existing MX, mail-related TXT, and existing mail authentication records (SPF, DKIM, DMARC). If DNS is hosted elsewhere, make the changes at that DNS provider instead.
 4. Wait until Vercel reports valid DNS configuration and issues HTTPS. Verify both hostnames and their redirect.
 
 Vercel reference: https://vercel.com/docs/domains/working-with-domains/add-a-domain

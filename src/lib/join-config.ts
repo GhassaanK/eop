@@ -1,7 +1,14 @@
-// Imported by Server Components and the Route Handler only. Never return this object to a client.
+import "server-only";
+import { isEmailAddress } from "@/lib/validation";
+
+// Never return this configuration to a Client Component.
 export function getJoinConfig() {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const host = process.env.SMTP_HOST?.trim();
+  const port = Number(process.env.SMTP_PORT);
+  const user = process.env.SMTP_USER?.trim();
+  const password = process.env.SMTP_PASSWORD;
   const to = process.env.JOIN_FORM_TO_EMAIL?.trim();
-  const from = process.env.JOIN_FORM_FROM_EMAIL?.trim();
-  return apiKey && to && from ? { apiKey, to, from } : null;
+  if (!host || !/^[a-z\d](?:[a-z\d.-]*[a-z\d])?$/i.test(host) || host.length > 253 || port !== 465 ||
+      !user || !isEmailAddress(user) || !password?.trim() || !to || !isEmailAddress(to)) return null;
+  return { host, port, user, password, to };
 }
