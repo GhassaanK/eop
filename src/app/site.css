@@ -407,3 +407,55 @@ main:focus { outline: none; }
 @media (max-width:800px) { .site-header .official-logo { width: 62px; height: 62px; } .site-header .brand-lockup { gap: 12px; } .site-header .brand-name { font-size: 16px; } }
 @media (max-width:639px) { .site-header .official-logo { width: 56px; height: 56px; } .site-header .brand-lockup { gap: 11px; } }
 
+
+/* A compact roster preserves role order without an empty featured row. */
+.team-section { border-top: 1px solid var(--border); }
+.team-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 38px; }
+.team-heading p { color: var(--muted); font-size: 15px; }
+.team-roster { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.team-profile { min-width: 0; }
+.team-portrait { overflow: hidden; background: var(--surface); aspect-ratio: 4 / 5; }
+.team-portrait img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.team-profile-copy { padding-top: 18px; border-top: 3px solid transparent; margin-top: 14px; }
+.team-president .team-profile-copy { border-top-color: var(--green); }
+.team-role { color: var(--green); font-size: 12px; font-weight: 600; margin-bottom: 7px; }
+.team-profile h3 { font-family: var(--font-display), Georgia, serif; font-size: clamp(23px, 2vw, 28px); font-weight: 400; line-height: 1.2; letter-spacing: -.02em; }
+.team-country { margin-top: 9px; color: var(--muted); font-size: 13px; }
+.home-introduction { background: var(--off-white); }
+.home-introduction .feature-copy h2 em { color: var(--black); }
+.home-introduction .feature-copy .lead { font-size: 16px; color: var(--green); font-weight: 600; }
+.home-direction { background: var(--surface); }
+.direction-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; }
+.direction-work { margin-top: 56px; padding-top: 38px; border-top: 1px solid var(--border); }
+.direction-work > h3 { margin-bottom: 30px; font-size: 22px; }
+.work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 40px; }
+.work-number { display: block; font-family: var(--font-display), Georgia, serif; color: var(--green); font-size: 23px; line-height: 1; margin-bottom: 15px; }
+.work-item h4 { font-size: 16px; font-weight: 600; line-height: 1.4; color: var(--black); margin: 0 0 12px; }
+.work-item p { font-size: 14px; line-height: 1.8; }
+.home-conference-grid { display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: 64px; }
+.conference-copy > * + * { margin-top: 22px; }
+.conference-copy > p:not(.lead) { font-size: 14px; }
+@media (max-width:1000px) {
+  .team-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 28px; }
+  .direction-intro { gap: 40px; }
+  .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-conference-grid { gap: 36px; }
+}
+@media (max-width:800px) {
+  .direction-intro, .home-conference-grid { grid-template-columns: 1fr; gap: 32px; }
+  .home-conference-grid .conference-panorama { order: -1; }
+}
+@media (max-width:639px) {
+  .team-heading { display: block; margin-bottom: 30px; }
+  .team-heading p { margin-top: 12px; }
+  .team-roster { grid-template-columns: 1fr; gap: 32px; }
+  .team-portrait { max-height: 420px; }
+  .team-profile h3 { font-size: 28px; }
+  .direction-work { margin-top: 36px; padding-top: 28px; }
+  .work-grid { grid-template-columns: 1fr; gap: 26px; }
+  .work-item { display: grid; grid-template-columns: 34px 1fr; column-gap: 12px; }
+  .work-number { grid-row: span 2; margin: 3px 0 0; }
+  .work-item h4 { margin-bottom: 8px; }
+  .direction-intro .principle-note { margin-top: 24px; }
+}
+
